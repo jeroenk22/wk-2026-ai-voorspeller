@@ -1,0 +1,41 @@
+# agents/group-analyst.yaml
+name: Group Analyst
+version: "1.0"
+description: |
+  Berekent op basis van alle wedstrijdvoorspellingen de volledige eindstand
+  per WK-poule. Past de officiële WK tiebreak-regels toe bij gelijke stand.
+  Bepaalt welke landen doorgaan naar de knock-outfase.
+
+model: claude-sonnet-4-6
+
+inputs:
+  - name: group_predictions
+    type: object
+    description: "Alle match-predictions voor een specifieke groep"
+  - name: group_id
+    type: string
+    description: "Groepsletter (A t/m L bij WK 2026 met 48 teams)"
+
+outputs:
+  - name: group_standings
+    type: array
+    description: |
+      Gesorteerde lijst met per land: positie, punten, gespeeld, gewonnen,
+      gelijkgespeeld, verloren, doelpunten voor/tegen, doelsaldo,
+      doorgekwalificeerd (ja/nee).
+
+tools: []
+
+constraints:
+  - Tiebreak-volgorde strikt volgen:
+    1. Punten onderling, 2. Doelsaldo onderling, 3. Goals onderling,
+    4. Herhaling criteria 1-3 voor betrokkenen, 5. Doelsaldo totaal,
+    6. Goals totaal, 7. FIFA-ranking
+  - Alle 48 poules berekenen (WK 2026 heeft 12 groepen van 4)
+
+success_criteria:
+  - Elke groep heeft een correcte gesorteerde eindstand
+  - Top 2 per groep is aangemerkt als gekwalificeerd
+  - Tiebreak-regels zijn correct toegepast
+
+memory: none

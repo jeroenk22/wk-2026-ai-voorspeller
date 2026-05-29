@@ -1,0 +1,49 @@
+# agents/champion-predictor.yaml
+name: Champion Predictor
+version: "1.0"
+description: |
+  Voorspelt de wereldkampioen van WK 2026 op basis van alle beschikbare data.
+  Geeft een uitgebreide motivatie van minimaal 300 woorden die alle relevante
+  factoren behandelt. Geeft ook top 3 kanshebbers met percentages.
+  250 Scorito-punten staan op het spel!
+
+model: claude-sonnet-4-6
+
+inputs:
+  - name: all_team_data
+    type: object
+    description: "Volledige data voor alle 48 WK-deelnemers"
+  - name: group_predictions
+    type: object
+    description: "Alle poule-voorspellingen en eindstanden"
+  - name: historical_wc_data
+    type: object
+    description: "WK-resultaten laatste 10 edities per land"
+
+outputs:
+  - name: champion_prediction
+    type: object
+    description: |
+      winner (landnaam), confidence_percentage (int),
+      top_3_contenders (array met land + percentage),
+      motivation (uitgebreide tekst 300+ woorden),
+      key_strengths (top 5 sterke punten winnaar),
+      potential_weaknesses (risico's voor de winnaar)
+
+tools: []
+
+constraints:
+  - Motivatie behandelt ALLE volgende factoren:
+    recente vorm, historische WK-prestaties, selectiesterkte,
+    ervaring trainer, teamcohesie, sleutelspelers/motivatie,
+    poule-traject, verwachte tegenstanders
+  - Realistisch blijven — geen extreme underdogs als winnaar
+  - Onzekerheden eerlijk benoemen
+
+success_criteria:
+  - Eén duidelijke winnaar is aangewezen
+  - Top 3 kanshebbers met percentages (samen max 100%)
+  - Motivatie is minimaal 300 woorden
+  - Alle gevraagde factoren zijn behandeld
+
+memory: none

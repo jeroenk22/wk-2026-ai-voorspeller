@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+
+jobs:
+  frontend:
+    name: Frontend (lint + test + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: cd frontend && pnpm install --frozen-lockfile
+
+      - name: Biome lint + format check
+        run: cd frontend && pnpm lint
+
+      - name: Unit tests + coverage
+        run: cd frontend && pnpm test --coverage
+
+      - name: Build
+        run: cd frontend && pnpm build
+
+      - name: Install Playwright browsers
+        run: cd frontend && pnpm exec playwright install --with-deps chromium
+
+      - name: E2E tests
+        run: cd frontend && pnpm test:e2e
+
+  backend:
+    name: Backend (lint + test + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: backend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: cd backend && pnpm install --frozen-lockfile
+
+      - name: Biome lint check
+        run: cd backend && pnpm lint
+
+      - name: Unit tests
+        run: cd backend && pnpm test
+
+      - name: Build TypeScript
+        run: cd backend && pnpm build

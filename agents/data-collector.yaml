@@ -1,0 +1,44 @@
+# agents/data-collector.yaml
+name: Data Collector
+version: "1.0"
+description: |
+  Haalt gestructureerde voetbaldata op via API-Football voor alle WK 2026 deelnemende landen.
+  Verzamelt: officiële WK-spelerselecties, blessures (bevestigd + twijfelgevallen),
+  recente wedstrijduitslagen (laatste 10), FIFA-ranking, clubinformatie van basisspelers.
+
+model: claude-sonnet-4-6
+
+inputs:
+  - name: country_codes
+    type: array<string>
+    description: "ISO landcodes van de te analyseren landen, bijv. ['NL', 'DE', 'BR']"
+  - name: tournament_id
+    type: integer
+    description: "API-Football toernooi ID voor WK 2026"
+
+outputs:
+  - name: team_data
+    type: object
+    description: |
+      Per land: selectie (naam, positie, club, FIFA-waarde), blessurelijst
+      (bevestigd/twijfel), recente uitslagen, FIFA-ranking, aantal CL/grote
+      club-spelers.
+
+tools:
+  - api_football_squads
+  - api_football_injuries
+  - api_football_fixtures
+  - api_football_standings
+
+constraints:
+  - Maximaal 80 API calls per run (gratis tier limiet bewaken)
+  - Nooit secrets of API keys loggen of returnen
+  - Bij twijfel over blessure: markeren als "twijfelgeval" niet weggooien
+  - Data cachen voor 1 uur om API calls te sparen
+
+success_criteria:
+  - Alle 48 WK-landen hebben volledige selectiedata
+  - Blessurelijst bevat onderscheid bevestigd/twijfelgeval
+  - Laatste 10 wedstrijden aanwezig per land
+
+memory: none

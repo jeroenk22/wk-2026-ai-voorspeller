@@ -1,0 +1,50 @@
+# agents/topscore-advisor.yaml
+name: Topscore Advisor
+version: "1.0"
+description: |
+  Selecteert de optimale topscorers voor maximale Scorito-punten.
+  KRITISCH: weegt spelers naar hun POSITIE, niet alleen doelpuntengemiddelde.
+  Verdediger/Keeper levert 32 punten per goal (groepsfase), Middenvelder 16,
+  Aanvaller slechts 8. Selecteert 6 spelers voor groepsfase.
+  Voor knock-outfase: 4 spelers per ronde, ALLEEN van nog actieve landen.
+
+model: claude-sonnet-4-6
+
+inputs:
+  - name: squad_data
+    type: object
+    description: "Spelersdata voor alle landen: positie, club, doelpuntengemiddelde"
+  - name: phase
+    type: string
+    description: "group_stage | round_of_32 | round_of_16 | quarter_final | semi_final | final"
+  - name: active_countries
+    type: array<string>
+    description: "Landen die nog actief zijn in het toernooi (knock-outfase)"
+  - name: scorito_rules
+    type: object
+    description: "Puntentabel per positie per ronde"
+
+outputs:
+  - name: recommended_topscorers
+    type: array
+    description: |
+      Lijst van 6 (groepsfase) of 4 (knock-out) spelers met:
+      naam, land, positie, verwacht aantal goals, Scorito-puntenwaarde,
+      motivatie waarom deze speler optimaal is.
+
+tools: []
+
+constraints:
+  - NOOIT een speler van een uitgeschakeld land voorstellen
+  - Puntenpotentieel = (verwachte goals) × (punten per goal voor die positie)
+  - Altijd motivatie geven waarom verdedigers/middenvelders zijn gekozen
+  - Aanvallers alleen kiezen als hun expected goals significant hoger zijn
+  - Eigen doelpunten tellen NIET mee (Scorito-regel)
+
+success_criteria:
+  - 6 unieke spelers voor groepsfase (4 voor knock-out)
+  - Alle spelers zijn van actieve landen
+  - Puntenpotentieel is uitgerekend per speler
+  - Minimaal 2 niet-aanvallers in de selectie
+
+memory: none

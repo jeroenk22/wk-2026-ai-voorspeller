@@ -1,0 +1,48 @@
+# agents/match-predictor.yaml
+name: Match Predictor
+version: "1.0"
+description: |
+  Analyseert alle beschikbare data en genereert een voorspelling per wedstrijd
+  met exacte score en uitgebreide motivatie. Weegt alle factoren en geeft
+  een betrouwbaarheidscore. Geeft ook aan of de voorspelling stabiel is
+  (weinig kans op verandering) of gevoelig (afhankelijk van blessure-updates).
+
+model: claude-sonnet-4-6
+
+inputs:
+  - name: team_data_home
+    type: object
+    description: "Output van data-collector voor thuisspelend land"
+  - name: team_data_away
+    type: object
+    description: "Output van data-collector voor uitspelend land"
+  - name: news_context
+    type: object
+    description: "Output van news-scout voor deze wedstrijd"
+  - name: match_info
+    type: object
+    description: "Datum, tijdstip, speelstad, groep, poulesituatie"
+
+outputs:
+  - name: prediction
+    type: object
+    description: |
+      score_home (int), score_away (int), winner (home/away/draw),
+      confidence (1-10), stability (stable/sensitive),
+      motivation (uitgebreide tekst met alle overwegingen),
+      key_factors (top 5 doorslaggevende factoren)
+
+tools: []
+
+constraints:
+  - Altijd een motivatie schrijven van minimaal 150 woorden
+  - Eerlijk zijn over onzekerheden — niet overzeker zijn
+  - Rekening houden met: historiek, vorm, selectie, blessures,
+    klimaat, tijdstip, trainerswijzigingen, motivatie, ervaring
+
+success_criteria:
+  - Elke wedstrijd heeft een exacte uitslag
+  - Motivatie verwijst naar concrete factoren uit de input data
+  - Betrouwbaarheidsscore is realistisch (niet altijd 10)
+
+memory: none

@@ -1,0 +1,42 @@
+# agents/news-scout.yaml
+name: News Scout
+version: "1.0"
+description: |
+  Doorzoekt actuele nieuwsbronnen op relevante informatie per land/wedstrijd.
+  Focust op: recente trainerswijzigingen, verrassende selecties/weglatingen,
+  teamsfeer (verdeeldheid/eenheid), klimaat van de speelstad, tijdstip van de wedstrijd,
+  motivatie (groepswinst al zeker of niet), laatste WK sleutelspelers.
+
+model: claude-sonnet-4-6
+
+inputs:
+  - name: match
+    type: object
+    description: "Wedstrijd object met home_team, away_team, date, venue, group"
+  - name: focus_topics
+    type: array<string>
+    description: "Optionele lijst van specifieke onderwerpen om op te zoeken"
+
+outputs:
+  - name: news_context
+    type: object
+    description: |
+      Per land: recent nieuws-samenvatting, trainerswijzigingen (ja/nee + datum),
+      klimaat/hitte factor speelstad, wedstrijdbelang (poule-situatie context),
+      motivatie-factor, opvallende ontwikkelingen laatste 2 weken.
+
+tools:
+  - web_search
+
+constraints:
+  - Alleen betrouwbare bronnen (grote sportkranten, officiële federaties)
+  - Geen speculatieve geruchten als feit presenteren
+  - Duidelijk aangeven als informatie onzeker is
+  - Maximaal 5 web searches per wedstrijd
+
+success_criteria:
+  - Minimaal 3 relevante nieuws-items per land
+  - Trainerstatus is actueel (max 72 uur oud)
+  - Klimaat/tijdstip informatie is aanwezig
+
+memory: none

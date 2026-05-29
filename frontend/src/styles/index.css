@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* ── Design tokens ── */
+@theme {
+  --color-wk-dark: #0f172a;
+  --color-wk-darker: #070e1a;
+  --color-wk-gold: #f59e0b;
+  --color-wk-gold-light: #fcd34d;
+  --color-wk-green: #10b981;
+  --color-wk-red: #ef4444;
+  --color-wk-blue: #3b82f6;
+  --color-wk-surface: #1e293b;
+  --color-wk-border: #334155;
+
+  --font-display: "Bebas Neue", "Impact", sans-serif;
+  --font-body: "DM Sans", "Inter", sans-serif;
+
+  --radius-card: 12px;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-wk-dark);
+  color: #f1f5f9;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap");
+
+/* ── App shell ── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Tab navigatie ── */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  padding: 8px 16px;
+  background: var(--color-wk-darker);
+  border-bottom: 1px solid var(--color-wk-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: #94a3b8;
+}
+
+.tab-btn:hover { background: var(--color-wk-surface); color: #e2e8f0; }
+
+.tab-btn--active {
+  background: var(--color-wk-gold);
+  color: var(--color-wk-dark);
+  font-weight: 700;
+}
+
+/* ── Main content ── */
+.main-content {
+  flex: 1;
+  padding: 16px;
+}
+
+/* Desktop: ruimere layout */
+@media (min-width: 768px) {
+  .main-content { padding: 24px 32px; }
+}
+
+@media (min-width: 1200px) {
+  .main-content { padding: 32px 48px; }
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--color-wk-surface);
+  border: 1px solid var(--color-wk-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+/* ── Vlag ── */
+.flag {
+  width: 32px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* ── Loading skeleton ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-wk-surface) 25%, var(--color-wk-border) 50%, var(--color-wk-surface) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Score badge ── */
+.score-badge {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  color: var(--color-wk-gold);
+}
+
+/* ── Desktop grid voor poules ── */
+@media (min-width: 1024px) {
+  .groups-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .groups-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

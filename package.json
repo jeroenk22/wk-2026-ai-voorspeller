@@ -1,0 +1,15 @@
+{
+  "name": "wk-2026-ai-voorspeller",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "concurrently --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\" \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\"",
+    "build": "pnpm --filter backend build && pnpm --filter frontend build",
+    "install:all": "pnpm --filter frontend install && pnpm --filter backend install",
+    "lint": "pnpm --filter frontend lint && pnpm --filter backend lint",
+    "test": "pnpm --filter frontend test && pnpm --filter backend test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

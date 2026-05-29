@@ -59,3 +59,34 @@ main (protected) → develop → feature/xxx, fix/xxx, chore/xxx
 - [Scorito spelregels](https://scorito.nl)
 - [API-Football docs](https://www.api-football.com/documentation-v3)
 - [Claude API docs](https://docs.anthropic.com)
+
+## Snel starten (één commando)
+
+```bash
+# Dependencies installeren (eenmalig)
+pnpm install
+cd frontend && pnpm install && cd ..
+cd backend && pnpm install && cd ..
+
+# Frontend + Backend tegelijk starten
+pnpm dev
+```
+
+→ Frontend: http://localhost:5173
+→ Backend:  http://localhost:3001
+
+## Netlify deployment
+
+1. Push naar GitHub (develop branch)
+2. Netlify koppelen aan de repo
+3. Build settings worden automatisch geladen uit `netlify.toml`
+4. Environment variables instellen in Netlify Dashboard:
+   - `ANTHROPIC_API_KEY`
+   - `API_FOOTBALL_KEY`
+   - `CLAUDE_MODEL` = `claude-sonnet-4-6`
+
+Of lokaal testen met Netlify CLI:
+```bash
+npm install -g netlify-cli
+netlify dev
+```

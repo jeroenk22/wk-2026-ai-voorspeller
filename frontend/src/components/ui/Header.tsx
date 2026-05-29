@@ -1,16 +1,28 @@
+import { useState } from "react";
+
 export function Header() {
+  const [logoError, setLogoError] = useState(false);
+
   return (
-    <header className="flex items-center gap-4 px-4 py-3 bg-[var(--color-wk-darker)] border-b border-[var(--color-wk-border)]">
-      {/* WK 2026 logo placeholder */}
-      <div className="flex items-center gap-2">
-        <span className="text-2xl">🌍</span>
-        <div>
-          <h1 className="font-display text-xl text-[var(--color-wk-gold)] leading-none">
-            WK 2026
-          </h1>
-          <p className="text-xs text-slate-400 leading-none">AI Voorspeller</p>
+    <header className="app-header">
+      <div className="header-brand">
+        {/* WK 2026 officieel logo */}
+        {!logoError ? (
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/3/3b/2026_FIFA_World_Cup_logo.svg"
+            alt="FIFA World Cup 2026"
+            className="header-logo"
+            onError={() => setLogoError(true)}
+          />
+        ) : (
+          <div className="header-logo-fallback">🏆</div>
+        )}
+        <div className="header-title">
+          <h1>WK 2026</h1>
+          <p>AI Voorspeller</p>
         </div>
       </div>
+      <div className="header-badge">AI Live</div>
     </header>
   );
 }
